@@ -1,0 +1,140 @@
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NotasCheck Sistemas de conferência de notas fiscais</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <svg width="200" height="50" viewBox="0 0 200 50">
+          <!-- Checkmark -->
+          <path d="M20 25 L30 35 L45 15" stroke="#3498db" stroke-width="4" fill="none"/>
+          <!-- Document outline -->
+          <rect x="15" y="10" width="40" height="30" rx="2" stroke="#2c3e50" stroke-width="2" fill="white"/>
+          <!-- Text lines -->
+          <line x1="25" y1="20" x2="45" y2="20" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="25" y1="30" x2="45" y2="30" stroke="#2c3e50" stroke-width="2"/>
+          <!-- Logo text -->
+          <text x="65" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50">
+            NotasCheck
+          </text>
+        </svg>
+      </div>
+      <h1>NotasCheck Sistemas de conferência de notas fiscais</h1>
+    </header>
+
+    <main>
+      <div class="tabs">
+        <div class="tab-buttons">
+          <button class="tab-button" data-tab="notas">Notas Fiscais</button>
+          <button class="tab-button" data-tab="upload">Importar Notas</button>
+          <button class="tab-button" data-tab="export">Exportar</button>
+          <button class="tab-button" data-tab="parametrizacao">Parametrização</button>
+        </div>
+
+        <!-- Notas Fiscais Tab -->
+        <div id="notas" class="tab-content">
+          <section class="notas-section">
+            <h2>Notas Fiscais Importadas</h2>
+            <div class="table-container">
+              <table id="notasTable">
+                <thead>
+                  <tr>
+                    <th>Número</th>
+                    <th>Tomador</th>
+                    <th>Valor Total</th>
+                    <th>Retenções</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="notasBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- Upload Tab -->
+        <div id="upload" class="tab-content">
+          <section class="upload-section">
+            <h2>Importar Notas Fiscais</h2>
+            <div class="drop-zone" id="dropZone">
+              <p>Arraste arquivos PDF/XML aqui ou</p>
+              <input type="file" id="fileInput" accept=".pdf,.xml" multiple>
+              <label for="fileInput" class="upload-btn">Selecione os Arquivos</label>
+            </div>
+          </section>
+        </div>
+
+        <!-- Export Tab -->
+        <div id="export" class="tab-content">
+          <section class="export-section">
+            <h2>Exportar Dados</h2>
+            <div class="export-options">
+              <div class="export-card">
+                <h3>JSON</h3>
+                <p>Exportar dados em formato JSON para integração com outros sistemas</p>
+                <button id="exportJson" class="action-btn">Exportar JSON</button>
+              </div>
+              <div class="export-card">
+                <h3>CSV</h3>
+                <p>Exportar dados em formato CSV para análise em planilhas</p>
+                <button id="exportCsv" class="action-btn">Exportar CSV</button>
+              </div>
+              <div class="export-card">
+                <h3>Relatório</h3>
+                <p>Gerar relatório detalhado em formato HTML</p>
+                <button id="gerarRelatorio" class="action-btn">Gerar Relatório</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Parametrização Tab -->
+        <div id="parametrizacao" class="tab-content">
+          <section class="parametrizacao-section">
+            <h2>Parametrização de Alíquotas</h2>
+            <div class="aliquotas-form">
+              <form id="aliquotasForm">
+                <div class="form-group">
+                  <label>ISS:</label>
+                  <input type="number" id="aliquotaIss" step="0.01" min="0" max="100" value="5.00">%
+                </div>
+                <div class="form-group">
+                  <label>IRPJ:</label>
+                  <input type="number" id="aliquotaIrpj" step="0.01" min="0" max="100" value="1.50">%
+                </div>
+                <div class="form-group">
+                  <label>CSLL:</label>
+                  <input type="number" id="aliquotaCsll" step="0.01" min="0" max="100" value="1.00">%
+                </div>
+                <div class="form-group">
+                  <label>COFINS:</label>
+                  <input type="number" id="aliquotaCofins" step="0.01" min="0" max="100" value="3.00">%
+                </div>
+                <div class="form-group">
+                  <label>PIS:</label>
+                  <input type="number" id="aliquotaPis" step="0.01" min="0" max="100" value="0.65">%
+                </div>
+                <button type="submit" class="save-btn">Salvar Alíquotas</button>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="modalContent"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
