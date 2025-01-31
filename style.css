@@ -405,8 +405,9 @@ th {
 
 .error-icon {
   color: #f44336;
-  margin-left: 5px;
   font-size: 1.2em;
+  margin-left: 5px;
+  cursor: help;
 }
 
 .inconsistent-nota td {
@@ -416,4 +417,24 @@ th {
 .inconsistent-nota .retencoes-table td {
   color: #f44336;
   font-weight: 500;
+}
+
+[title] {
+  position: relative;
+}
+
+[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 1000;
+  background-color: #f44336;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: pre-line;
+  max-width: 300px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }

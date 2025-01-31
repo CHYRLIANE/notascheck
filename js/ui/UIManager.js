@@ -50,10 +50,11 @@ export class UIManager {
     // Add error class if nota has inconsistencies
     if (nota.hasInconsistencies) {
       row.classList.add('inconsistent-nota');
-      this.showErrorMessage('Inconsistência bloqueada: As retenções informadas não relacionadas aos percentuais esperados. Favor revisar os valores para correção.');
+      const messages = nota.inconsistencyMessages.join('\n');
+      row.setAttribute('title', messages);
+      this.showErrorMessage('Erro na retenção: Os valores informados não especificam os percentuais parametrizados. Favor revisar e corrigir os valores.\n\nDetalhes:\n' + messages);
     }
   
-    // Ensure tomador.razaoSocial is limited to 525 characters
     const razaoSocial = (nota.tomador?.razaoSocial || '').substring(0, 525);
   
     row.innerHTML = `

@@ -31,37 +31,52 @@ export class NotaFiscal {
     };
 
     // Validate retentions
-    this.hasInconsistencies = this.validateRetentions(valorTotalNumeric);
+    const validationResult = this.validateRetentions(valorTotalNumeric);
+    this.hasInconsistencies = validationResult.hasErrors;
+    this.inconsistencyMessages = validationResult.messages;
   }
 
   validateRetentions(valorTotal) {
-    const expectedRetentions = {
-      irpj: this.calculateIrpj(valorTotal),
-      csll: this.calculateCsll(valorTotal),
-      cofins: this.calculateCofins(valorTotal),
-      pis: this.calculatePis(valorTotal),
-      iss: this.calculateIss(valorTotal)
+    const result = {
+      hasErrors: false,
+      messages: []
     };
 
-    // Convert actual values to numeric for comparison
-    const actualRetentions = {
-      irpj: this.parseValorToNumber(this.retencoes.irpj),
-      csll: this.parseValorToNumber(this.retencoes.csll),
-      cofins: this.parseValorToNumber(this.retencoes.cofins),
-      pis: this.parseValorToNumber(this.retencoes.pis),
-      iss: this.parseValorToNumber(this.valores.valorIss)
+    const retentions = {
+      'IRPJ': {
+        actual: this.parseValorToNumber(this.retencoes.irpj),
+        expected: valorTotal * 0.015
+      },
+      'CSLL': {
+        actual: this.parseValorToNumber(this.retencoes.csll),
+        expected: valorTotal * 0.01
+      },
+      'COFINS': {
+        actual: this.parseValorToNumber(this.retencoes.cofins),
+        expected: valorTotal * 0.0108
+      },
+      'PIS': {
+        actual: this.parseValorToNumber(this.retencoes.pis),
+        expected: valorTotal * 0.03
+      },
+      'ISS': {
+        actual: this.parseValorToNumber(this.valores.valorIss),
+        expected: valorTotal * 0.05
+      }
     };
 
-    // Check for discrepancies with a small tolerance
-    const tolerance = 0.01; // 1 cent tolerance
-    for (const [type, expected] of Object.entries(expectedRetentions)) {
-      const actual = actualRetentions[type];
-      if (Math.abs(actual - expected) > tolerance) {
-        return true;
+    // Check each retention
+    for (const [type, values] of Object.entries(retentions)) {
+      if (values.actual === 0) {
+        result.hasErrors = true;
+        result.messages.push(`${type} está zerado`);
+      } else if (Math.abs(values.actual - values.expected) > 0.01) { // 1 cent tolerance
+        result.hasErrors = true;
+        result.messages.push(`${type} incorreto (esperado: R$ ${values.expected.toFixed(2)})`);
       }
     }
 
-    return false;
+    return result;
   }
 
   parseValorToNumber(valor) {
