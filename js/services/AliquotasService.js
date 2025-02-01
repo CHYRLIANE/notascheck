@@ -21,31 +21,38 @@ export class AliquotasService {
   }
 
   saveAliquotas(aliquotas) {
+    // Validate input to ensure numeric values
+    Object.keys(aliquotas).forEach(key => {
+      aliquotas[key] = parseFloat(aliquotas[key]) || 0;
+    });
+
     this.aliquotas = aliquotas;
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(aliquotas));
+    return aliquotas;
   }
 
   getAliquotas() {
+    this.loadAliquotas(); 
     return this.aliquotas;
   }
 
+  calculateIss(valorTotal) {
+    return valorTotal * (this.aliquotas.iss / 100);
+  }
+
   calculateIrpj(valorTotal) {
-    return valorTotal * (this.aliquotas.irpj / 100); // 0.015 = 1.5%
+    return valorTotal * (this.aliquotas.irpj / 100);
   }
 
   calculateCsll(valorTotal) {
-    return valorTotal * (this.aliquotas.csll / 100); // 0.01 = 1%
+    return valorTotal * (this.aliquotas.csll / 100);
   }
 
   calculateCofins(valorTotal) {
-    return valorTotal * (this.aliquotas.cofins / 100); // 0.0108 = 1.08%
+    return valorTotal * (this.aliquotas.cofins / 100);
   }
 
   calculatePis(valorTotal) {
-    return valorTotal * (this.aliquotas.pis / 100); // 0.03 = 3%
-  }
-
-  calculateIss(valorTotal) {
-    return valorTotal * (this.aliquotas.iss / 100); // 0.05 = 5%
+    return valorTotal * (this.aliquotas.pis / 100);
   }
 }

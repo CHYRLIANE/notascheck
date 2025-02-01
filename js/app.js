@@ -55,8 +55,11 @@ class App {
         cofins: parseFloat(document.getElementById('aliquotaCofins').value),
         pis: parseFloat(document.getElementById('aliquotaPis').value)
       };
+      
+      // Save aliquotas and recalculate all existing notas
       this.aliquotasService.saveAliquotas(aliquotas);
-      this.ui.showSuccessMessage('Alíquotas salvas com sucesso!');
+      this.recalculateAllNotas();
+      this.ui.showSuccessMessage('Alíquotas atualizadas. Todas as notas foram recalculadas.');
     });
 
     // Export buttons
@@ -73,19 +76,51 @@ class App {
     });
   }
 
+  recalculateAllNotas() {
+    const notas = this.controller.getAllNotas();
+    const updatedNotas = notas.map(nota => 
+      new NotaFiscal(nota, this.aliquotasService, nota)
+    );
+
+    // Clear and repopulate the table
+    this.storage.clearNotas();
+    updatedNotas.forEach(nota => {
+      this.controller.addNota(nota);
+    });
+
+    // Refresh UI
+    this.ui.refreshTable(updatedNotas);
+  }
+
   async processFiles(files) {
-    for (const file of files) {
+    if (files.length === 0) return;
+
+    const confirmed = await this.ui.showImportConfirmation(files.length);
+    if (!confirmed) return;
+
+    this.ui.showProgressOverlay();
+    
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      this.ui.updateProgressStatus(i + 1, files.length);
+      
       try {
         const notaData = await this.fileProcessor.processFile(file);
         const nota = new NotaFiscal(notaData, this.aliquotasService);
         this.controller.addNota(nota);
         this.ui.addNotaToTable(nota);
-        this.ui.showSuccessMessage(`Nota ${nota.numero} importada com sucesso!`);
+        successCount++;
       } catch (error) {
         console.error('Erro ao processar arquivo:', error);
-        this.ui.showErrorMessage(`Erro ao processar arquivo ${file.name}: ${error.message}`);
+        errorCount++;
       }
     }
+
+    this.ui.hideProgressOverlay();
+    this.ui.showCompletionMessage(successCount, errorCount);
   }
 
   loadStoredNotas() {

@@ -33,4 +33,8 @@ export class StorageService {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notas));
     }
   }
+
+  clearNotas() {
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
 }

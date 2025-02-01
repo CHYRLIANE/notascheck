@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NotasCheck Sistemas de conferência de notas fiscais</title>
+  <title>NotasCheck - Solução para Conferência de Notas Fiscais</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script type="module" src="js/app.js"></script>
@@ -11,21 +11,37 @@
   <div class="container">
     <header>
       <div class="logo-container">
-        <svg width="200" height="50" viewBox="0 0 200 50">
-          <!-- Checkmark -->
-          <path d="M20 25 L30 35 L45 15" stroke="#3498db" stroke-width="4" fill="none"/>
-          <!-- Document outline -->
-          <rect x="15" y="10" width="40" height="30" rx="2" stroke="#2c3e50" stroke-width="2" fill="white"/>
-          <!-- Text lines -->
-          <line x1="25" y1="20" x2="45" y2="20" stroke="#2c3e50" stroke-width="2"/>
-          <line x1="25" y1="30" x2="45" y2="30" stroke="#2c3e50" stroke-width="2"/>
-          <!-- Logo text -->
-          <text x="65" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50">
-            NotasCheck
-          </text>
+        <svg width="300" height="90" viewBox="0 0 450 90">
+          <!-- Background circle -->
+          <circle cx="45" cy="45" r="38" fill="#f5f6fa"/>
+          
+          <!-- Stacked documents -->
+          <path d="M30 52 L60 52 L60 22 L30 22 Z" fill="#3498db" opacity="0.3"/>
+          <path d="M27 49 L57 49 L57 19 L27 19 Z" fill="#3498db" opacity="0.5"/>
+          <path d="M24 46 L54 46 L54 16 L24 16 Z" fill="#3498db"/>
+          
+          <!-- Document lines -->
+          <line x1="30" y1="24" x2="48" y2="24" stroke="white" stroke-width="2"/>
+          <line x1="30" y1="30" x2="48" y2="30" stroke="white" stroke-width="2"/>
+          <line x1="30" y1="36" x2="42" y2="36" stroke="white" stroke-width="2"/>
+          
+          <!-- Magnifying glass -->
+          <circle cx="63" cy="42" r="12" fill="none" stroke="#2c3e50" stroke-width="3.5"/>
+          <line x1="72" y1="51" x2="78" y2="57" stroke="#2c3e50" stroke-width="3.5" stroke-linecap="round"/>
+          
+          <!-- Checkmark overlay -->
+          <path d="M42 33 L48 39 L57 30" stroke="#2ecc71" stroke-width="3" fill="none"/>
+          
+          <!-- Logo text with increased size -->
+          <text x="105" y="57" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#2c3e50">NotasCheck</text>
         </svg>
       </div>
-      <h1>NotasCheck Sistemas de conferência de notas fiscais</h1>
+      <div class="header-description">
+        <h1>NotasCheck – Importação, validação e conferência de NFS-e de forma automatizada</h1>
+        <p class="header-subtitle">
+          Sistema especializado para importação, validação e conferência de Notas Fiscais de Serviço Eletrônicas (NFS-e) de forma automatizada, permitindo um controle eficiente e preciso de suas notas fiscais.
+        </p>
+      </div>
     </header>
 
     <main>
@@ -45,6 +61,9 @@
               <table id="notasTable">
                 <thead>
                   <tr>
+                    <th class="checkbox-column">
+                      <input type="checkbox" id="selectAllNotas">
+                    </th>
                     <th>Número</th>
                     <th>Tomador</th>
                     <th>Valor Total</th>
